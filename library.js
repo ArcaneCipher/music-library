@@ -160,8 +160,7 @@ const printPlaylist = function (playlistId) {
 
   // Loop through the track IDs in the playlist
   for (const trackId of playlist.tracks) {
-    // Check if the track ID is valid in the tracks object
-    const track = tracks[trackId];
+    const track = tracks[trackId];  // Check if the track ID is valid in the tracks object
 
     if (!track) {
       console.warn(`Track ${trackId} not found in the library and will be skipped.`);
@@ -189,29 +188,37 @@ const addTrackToPlaylist = function (trackId, playlistId) {
 
 };
 
-// generates a unique id
-// (already implemented: use this for addTrack and addPlaylist)
+    /////////////// UNIQUE ID FUNCTION ///////////////
+    // generates a unique id
+    // (already implemented: use this for addTrack and addPlaylist)
+
 const generateUid = function () {
   return Math.floor((1 + Math.random()) * 0x10000)
     .toString(16)
     .substring(1);
 };
 
-// adds a track to the library
+    /////////////// ADD TRACK TO LIBRARY FUNCTION ///////////////
+    // adds a track to the library
+
 const addTrack = function (name, artist, album) {
 
 };
 
-// adds a playlist to the library
+    /////////////// ADD PLAYLIST FUNCTION ///////////////
+    // adds a playlist to the library
+
 const addPlaylist = function (name) {
 
 };
 
-// STRETCH:
-// given a query string string, prints a list of tracks
-// where the name, artist or album contains the query string (case insensitive)
-// tip: use "string".search("tri")
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/search
+    /////////////// ADD SEARCH TRACKS FUNCTION ///////////////
+    // STRETCH:
+    // given a query string string, prints a list of tracks
+    // where the name, artist or album contains the query string (case insensitive)
+    // tip: use "string".search("tri")
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/search
+
 const printSearchResults = function (query) {
   
 };
