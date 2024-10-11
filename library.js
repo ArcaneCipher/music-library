@@ -40,6 +40,11 @@ const library = {
       name: "Missing Tracks",
       tracks: ["t01", "t02", "txx"],
     },
+    p05: {
+      id: "p05",
+      name: "Adding Tracks",
+      tracks: [],
+    },
   },
 };
 
@@ -82,8 +87,8 @@ const printPlaylists = function () {
 };
 
 // Test output for the function
-console.log("The playlists are:");
-printPlaylists();
+// console.log("The playlists are:");
+// printPlaylists();
 
 /////////////// PRINT TRACKS FUNCTION ///////////////
 // prints a list of all tracks, using the following format:
@@ -119,8 +124,8 @@ const printTracks = function () {
 };
 
 // Test output for the function
-console.log("The tracks are:");
-printTracks();
+// console.log("The tracks are:");
+// printTracks();
 
 /////////////// PRINT PLAYLIST TRACKS FUNCTION ///////////////
 // prints a list of tracks for a given playlist, using the following format:
@@ -153,17 +158,19 @@ const printPlaylist = function (playlistId) {
   );
 
   // Check if the playlist is empty
-  if (playlist.tracks.length === 0) {
+  if (numTracks === 0) {
     console.log("This playlist is currently empty.");
     return;
   }
 
   // Loop through the track IDs in the playlist
   for (const trackId of playlist.tracks) {
-    const track = tracks[trackId];  // Check if the track ID is valid in the tracks object
+    const track = tracks[trackId]; // Check if the track ID is valid in the tracks object
 
     if (!track) {
-      console.warn(`Track ${trackId} not found in the library and will be skipped.`);
+      console.warn(
+        `Track ${trackId} not found in the library and will be skipped.`
+      );
       continue;
     }
 
@@ -177,20 +184,44 @@ const printPlaylist = function (playlistId) {
   }
 };
 
-console.log("The playlist tracks are:");
-printPlaylist("p01");
+// Test output for the function
+// console.log("The playlist tracks are:");
+// printPlaylist("p01");
 
-/*
-    /////////////// ADD TRACK TO PLAYLIST FUNCTION ///////////////
-    // adds an existing track to an existing playlist
+/////////////// ADD TRACK TO PLAYLIST FUNCTION ///////////////
+// adds an existing track to an existing playlist
 
 const addTrackToPlaylist = function (trackId, playlistId) {
+  const playlist = library.playlists[playlistId];
+  const track = library.tracks[trackId];
 
+  if (!playlist) {
+    console.warn(`Playlist with ID '${playlistId}' does not exist.`);
+    return;
+  }
+
+  if (!track) {
+    console.warn(`Track with ID '${trackId}' does not exist.`);
+    return;
+  }
+
+  if (playlist.tracks.includes(trackId)) {
+    console.log(`Track ${trackId} is already in playlist ${playlistId}.`);
+    return;
+  }
+
+  playlist.tracks.push(trackId);
+
+  console.log(`Track ${trackId} successfully added to playlist ${playlistId}.`);
 };
 
-    /////////////// UNIQUE ID FUNCTION ///////////////
-    // generates a unique id
-    // (already implemented: use this for addTrack and addPlaylist)
+// Test output for the function
+// console.log("The add track to playlist function output:");
+// addTrackToPlaylist("t01","p05");
+
+/////////////// UNIQUE ID FUNCTION ///////////////
+// generates a unique id
+// (already implemented: use this for addTrack and addPlaylist)
 
 const generateUid = function () {
   return Math.floor((1 + Math.random()) * 0x10000)
@@ -198,28 +229,132 @@ const generateUid = function () {
     .substring(1);
 };
 
-    /////////////// ADD TRACK TO LIBRARY FUNCTION ///////////////
-    // adds a track to the library
+/////////////// ADD TRACK TO LIBRARY FUNCTION ///////////////
+// adds a track to the library
 
 const addTrack = function (name, artist, album) {
+  const existingTrackIds = Object.keys(library.tracks);
 
+  // Check if the generated ID exists in the array of existing track IDs
+  const generateUniqueTrackId = function () {
+    let newTrackId = generateUid();
+    console.warn(`Generating a new trackId, please wait...`);
+
+    // Check if the generated ID exists in the array of existing track IDs
+    while (existingTrackIds.includes(newTrackId)) {
+      console.warn(
+        `Track ID ${newTrackId} already exists. Generating a new ID.`
+      );
+      newTrackId = generateUid(); // Generate a new ID if there's a collision
+    }
+
+    return newTrackId; // Return unique ID
+  };
+
+  // Generate a new unique track ID
+  const trackId = generateUniqueTrackId();
+
+  // Validate the input values (ensure they're strings)
+  if (
+    (typeof name !== "string" && typeof name !== "number") ||
+    (typeof artist !== "string" && typeof artist !== "number") ||
+    (typeof album !== "string" && typeof album !== "number")
+  ) {
+    console.error(
+      "Invalid input. All fields (name, artist, album) must be strings or numbers."
+    );
+    return;
+  }
+
+  // Convert inputs to strings if they are numbers
+  const trackName = String(name).trim();
+  const trackArtist = String(artist).trim();
+  const trackAlbum = String(album).trim();
+
+  // Add the new track to the library
+  library.tracks[trackId] = {
+    id: trackId,
+    name: trackName,
+    artist: trackArtist,
+    album: trackAlbum,
+  };
+  console.log(
+    `Track '${trackName}' by ${trackArtist} from album ${trackAlbum} added successfully with ID ${trackId}.`
+  );
 };
 
-    /////////////// ADD PLAYLIST FUNCTION ///////////////
-    // adds a playlist to the library
+// Test output for the function
+// console.log("The add track function output:");
+// addTrack("123", 456, "789");
+
+
+/////////////// ADD PLAYLIST FUNCTION ///////////////
+// adds a playlist to the library
 
 const addPlaylist = function (name) {
+  const existingPlaylistIds = Object.keys(library.playlists);
 
+  // Check if the generated ID exists in the array of existing track IDs
+  const generateUniquePlaylistId = function () {
+    let newPlaylistId = generateUid();
+    console.warn(`Generating a new playlistId, please wait...`);
+
+    // Check if the generated ID exists in the array of existing track IDs
+    while (existingPlaylistIds.includes(newPlaylistId)) {
+      console.warn(
+        `Playlist ID ${newPlaylistId} already exists. Generating a new ID.`
+      );
+      newPlaylistId = generateUid(); // Generate a new ID if there's a collision
+    }
+
+    return newPlaylistId; // Return unique ID
+  };
+
+  // Generate a new unique track ID
+  const playlistkId = generateUniquePlaylistId();
+
+  // Validate the input values (ensure they're strings)
+  if (typeof name !== "string" && typeof name !== "number"
+  ) {
+    console.error(
+      "Invalid input. Playlist must be a string or number."
+    );
+    return;
+  } else {
+  if (String(name).trim().length === 0) {
+    console.error("Invalid input. Playlist name cannot be empty or only spaces.");
+    return;
+    }
+  }
+  
+  // Convert inputs to strings if they are numbers
+  const playlistName = String(name).trim();
+
+  // Add the new track to the library
+  library.playlists[playlistkId] = {
+    id: playlistkId,
+    name: playlistName,
+    tracks: []
+  };
+  console.log(
+    `Playlist: '${playlistName}' added successfully with ID ${playlistkId}. It currently has no tracks.`
+  );
 };
 
-    /////////////// ADD SEARCH TRACKS FUNCTION ///////////////
-    // STRETCH:
-    // given a query string string, prints a list of tracks
-    // where the name, artist or album contains the query string (case insensitive)
-    // tip: use "string".search("tri")
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/search
+// Test output for the function
+// console.log("The add playlist function output:");
+// addPlaylist("New Playlist");
+
+/*
+/////////////// ADD SEARCH TRACKS FUNCTION ///////////////
+// STRETCH:
+// given a query string string, prints a list of tracks
+// where the name, artist or album contains the query string (case insensitive)
+// tip: use "string".search("tri")
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/search
 
 const printSearchResults = function (query) {
   
-};
- */
+};*/
+
+// Test output for the function
