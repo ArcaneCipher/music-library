@@ -46,88 +46,91 @@ const library = {
       tracks: [],
     },
   },
+  printPlaylists: function () {
+    const playlists = this.playlists; // Retrieve all playlists from the library
+  
+    // Check if there are any playlists available
+    if (Object.keys(playlists).length === 0) {
+      console.log("No playlists available.");
+      return;
+    }
+  
+    // Iterate through the playlists object
+    for (const [key, playlist] of Object.entries(playlists)) {
+      // Check if the playlist is valid (i.e., contains expected properties)
+      if (!playlist || !playlist.tracks || !Array.isArray(playlist.tracks)) {
+        console.warn(
+          `Playlist with ID '${key}' has invalid data and will be skipped.`
+        );
+        continue;
+      }
+      const numTracks = playlist.tracks.length; // Get the number of tracks in the playlist
+  
+      // Print the playlist details with correct pluralization of 'track/tracks'
+      console.log(
+        `${playlist.id}: ${playlist.name} - ${numTracks} ${
+          numTracks === 1 ? "track" : "tracks"
+        }`
+      );
+    }
+  },
+  printTracks: function () {
+    const tracks = this.tracks; // Retrieve all tracks from the library
+  
+    // Check if there are any tracks available
+    if (Object.keys(tracks).length === 0) {
+      console.log("No tracks available.");
+      return;
+    }
+  
+    // Iterate through the tracks object
+    for (const [key, track] of Object.entries(tracks)) {
+      // Ensure the track object is valid and has required properties
+      if (typeof track !== "object") {
+        console.warn(`Track ${key} is invalid and will be skipped.`);
+        continue;
+      }
+  
+      // Fallback values for missing data to maintain formatting robustness
+      const trackName = track.name || "Unknown Track";
+      const artistName = track.artist || "Unknown Artist";
+      const albumName = track.album || "Unknown Album";
+  
+      // Print the track details with fallback values
+      console.log(`${track.id}: ${trackName} by ${artistName} (${albumName})`);
+    }
+  }
 };
 
 /////////////////////////////
 // FUNCTIONS TO IMPLEMENT:
 /////////////////////////////
 
-/////////////// PRINT PLAYLISTS FUNCTION ///////////////
+/////////////////////////////
+// PRINT PLAYLISTS FUNCTION 
 // prints a list of all playlists, in the form:
 // p01: Coding Music - 2 tracks
 // p02: Other Playlist - 1 tracks
 
-const printPlaylists = function () {
-  const playlists = library.playlists; // Retrieve all playlists from the library
-
-  // Check if there are any playlists available
-  if (Object.keys(playlists).length === 0) {
-    console.log("No playlists available.");
-    return;
-  }
-
-  // Iterate through the playlists object
-  for (const [key, playlist] of Object.entries(playlists)) {
-    // Check if the playlist is valid (i.e., contains expected properties)
-    if (!playlist || !playlist.tracks || !Array.isArray(playlist.tracks)) {
-      console.warn(
-        `Playlist with ID '${key}' has invalid data and will be skipped.`
-      );
-      continue;
-    }
-    const numTracks = playlist.tracks.length; // Get the number of tracks in the playlist
-
-    // Print the playlist details with correct pluralization of 'track/tracks'
-    console.log(
-      `${playlist.id}: ${playlist.name} - ${numTracks} ${
-        numTracks === 1 ? "track" : "tracks"
-      }`
-    );
-  }
-};
-
 // Test output for the function
-// console.log("The playlists are:");
-// printPlaylists();
+console.log("The playlists are:");
+library.printPlaylists();
+/////////////////////////////
 
-/////////////// PRINT TRACKS FUNCTION ///////////////
+/////////////////////////////
+// PRINT TRACKS FUNCTION
 // prints a list of all tracks, using the following format:
 // t01: Code Monkey by Jonathan Coulton (Thing a Week Three)
 // t02: Model View Controller by James Dempsey (WWDC 2003)
 // t03: Four Thirty-Three by John Cage (Woodstock 1952)
 
-const printTracks = function () {
-  const tracks = library.tracks; // Retrieve all tracks from the library
-
-  // Check if there are any tracks available
-  if (Object.keys(tracks).length === 0) {
-    console.log("No tracks available.");
-    return;
-  }
-
-  // Iterate through the tracks object
-  for (const [key, track] of Object.entries(tracks)) {
-    // Ensure the track object is valid and has required properties
-    if (typeof track !== "object") {
-      console.warn(`Track ${key} is invalid and will be skipped.`);
-      continue;
-    }
-
-    // Fallback values for missing data to maintain formatting robustness
-    const trackName = track.name || "Unknown Track";
-    const artistName = track.artist || "Unknown Artist";
-    const albumName = track.album || "Unknown Album";
-
-    // Print the track details with fallback values
-    console.log(`${track.id}: ${trackName} by ${artistName} (${albumName})`);
-  }
-};
-
 // Test output for the function
-// console.log("The tracks are:");
-// printTracks();
+console.log("The tracks are:");
+library.printTracks();
+/////////////////////////////
 
-/////////////// PRINT PLAYLIST TRACKS FUNCTION ///////////////
+/////////////////////////////
+// PRINT PLAYLIST TRACKS FUNCTION
 // prints a list of tracks for a given playlist, using the following format:
 // p01: Coding Music - 2 tracks
 // t01: Code Monkey by Jonathan Coulton (Thing a Week Three)
@@ -185,10 +188,12 @@ const printPlaylist = function (playlistId) {
 };
 
 // Test output for the function
-// console.log("The playlist tracks are:");
-// printPlaylist("p01");
+console.log("The playlist tracks are:");
+printPlaylist("p01");
+/////////////////////////////
 
-/////////////// ADD TRACK TO PLAYLIST FUNCTION ///////////////
+/////////////////////////////
+// ADD TRACK TO PLAYLIST FUNCTION
 // adds an existing track to an existing playlist
 
 const addTrackToPlaylist = function (trackId, playlistId) {
@@ -216,10 +221,12 @@ const addTrackToPlaylist = function (trackId, playlistId) {
 };
 
 // Test output for the function
-// console.log("The add track to playlist function output:");
-// addTrackToPlaylist("t01","p05");
+console.log("The add track to playlist function output:");
+addTrackToPlaylist("t01","p05");
+/////////////////////////////
 
-/////////////// UNIQUE ID FUNCTION ///////////////
+/////////////////////////////
+// UNIQUE ID FUNCTION
 // generates a unique id
 // (already implemented: use this for addTrack and addPlaylist)
 
@@ -229,7 +236,10 @@ const generateUid = function () {
     .substring(1);
 };
 
-/////////////// ADD TRACK TO LIBRARY FUNCTION ///////////////
+/////////////////////////////
+
+/////////////////////////////
+// ADD TRACK TO LIBRARY FUNCTION
 // adds a track to the library
 
 const addTrack = function (name, artist, album) {
@@ -284,11 +294,13 @@ const addTrack = function (name, artist, album) {
 };
 
 // Test output for the function
-// console.log("The add track function output:");
-// addTrack("123", 456, "789");
+console.log("The add track function output:");
+addTrack("123", 456, "789");
+/////////////////////////////
 
 
-/////////////// ADD PLAYLIST FUNCTION ///////////////
+/////////////////////////////
+// ADD PLAYLIST FUNCTION
 // adds a playlist to the library
 
 const addPlaylist = function (name) {
@@ -342,11 +354,13 @@ const addPlaylist = function (name) {
 };
 
 // Test output for the function
-// console.log("The add playlist function output:");
-// addPlaylist("New Playlist");
+console.log("The add playlist function output:");
+addPlaylist("New Playlist");
+/////////////////////////////
 
 /*
-/////////////// ADD SEARCH TRACKS FUNCTION ///////////////
+/////////////////////////////
+// ADD SEARCH TRACKS FUNCTION
 // STRETCH:
 // given a query string string, prints a list of tracks
 // where the name, artist or album contains the query string (case insensitive)
@@ -358,3 +372,5 @@ const printSearchResults = function (query) {
 };*/
 
 // Test output for the function
+
+/////////////////////////////
